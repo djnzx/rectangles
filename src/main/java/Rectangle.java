@@ -2,7 +2,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class Rectangle {
+class Rectangle {
     private final Point p1;
     private final Point p2;
 
@@ -15,29 +15,30 @@ public class Rectangle {
         this.p2 = p2;
     }
 
-    int x_min() {
+    int left() {
         return Math.min(p1.x(), p2.x());
     }
 
-    int x_max() {
+    int right() {
         return Math.max(p1.x(), p2.x());
     }
 
-    int y_min() {
+    int top() {
         return Math.min(p1.y(), p2.y());
     }
 
-    int y_max() {
+    int bottom() {
         return Math.max(p1.y(), p2.y());
     }
 
     Collection<Point> points() {
-        return IntStream.rangeClosed(x_min(), x_max())
+        return IntStream.rangeClosed(left(), right())
                 .mapToObj(x -> IntStream
-                        .rangeClosed(y_min(), y_max())
+                        .rangeClosed(top(), bottom())
                         .mapToObj(y -> new Point(x, y))
                         .collect(Collectors.toList()))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
+
 }
