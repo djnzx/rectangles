@@ -1,5 +1,6 @@
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Rectangle {
     private final Point p1;
@@ -14,50 +15,29 @@ public class Rectangle {
         this.p2 = p2;
     }
 
-    public Point p1() {
-        return p1;
+    int x_min() {
+        return Math.min(p1.x(), p2.x());
     }
 
-    public Point p2() {
-        return p2;
+    int x_max() {
+        return Math.max(p1.x(), p2.x());
     }
 
-    public Collection<Point> points() {
-        int minx = Math.min(p1.x(), p2.x());
-        int maxx = Math.max(p1.x(), p2.x());
-        int miny = Math.min(p1.y(), p2.y());
-        int maxy = Math.max(p1.y(), p2.y());
-        int width  = maxx - minx + 1;
-        int height = maxy - miny + 1;
-        ArrayList<Point> points = new ArrayList<>(width * height);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                points.add(new Point(minx + x , miny + y));
-            }
-        }
-        return points;
+    int y_min() {
+        return Math.min(p1.y(), p2.y());
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Rectangle rectangle = (Rectangle) o;
-
-        if (p1 != null ? !p1.equals(rectangle.p1) : rectangle.p1 != null) return false;
-        return p2 != null ? p2.equals(rectangle.p2) : rectangle.p2 == null;
+    int y_max() {
+        return Math.max(p1.y(), p2.y());
     }
 
-    @Override
-    public int hashCode() {
-        int result = p1 != null ? p1.hashCode() : 0;
-        result = 31 * result + (p2 != null ? p2.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Rectangle{p1=%s, p2=%s}", p1, p2);
+    Collection<Point> points() {
+        return IntStream.rangeClosed(x_min(), x_max())
+                .mapToObj(x -> IntStream
+                        .rangeClosed(y_min(), y_max())
+                        .mapToObj(y -> new Point(x, y))
+                        .collect(Collectors.toList()))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 }
