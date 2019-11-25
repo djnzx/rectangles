@@ -1,42 +1,41 @@
-class Point {
-    private final int x;
-    private final int y;
+final class Point {
+  private final int x;
+  private final int y;
 
-    static Point random() {
-        return new Point(
-                Fn.random_val(C.POINT_MIN_X, C.POINT_MAX_X),
-                Fn.random_val(C.POINT_MIN_Y, C.POINT_MAX_Y)
-        );
-    }
+  static Point random() {
+    return new Point(
+        Fn.random_val(C.POINT_MIN_X, C.POINT_MAX_X),
+        Fn.random_val(C.POINT_MIN_Y, C.POINT_MAX_Y)
+    );
+  }
 
-    Point(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
+  Point(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
 
-    int x() {
-        return x;
-    }
+  int x() {
+    return x;
+  }
 
-    int y() {
-        return y;
-    }
+  int y() {
+    return y;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  @Override
+  public boolean equals(Object o) {
+    if (o == this) return true;
+    if (o == null) return false;
+    if (!(o instanceof Point)) return false;
 
-        Point point = (Point) o;
+    Point that = (Point) o;
 
-        if (x != point.x) return false;
-        return y == point.y;
-    }
+    return this.x == that.x
+        && this.y == that.y;
+  }
 
-    @Override
-    public int hashCode() {
-        int result = x;
-        result = 31 * result + y;
-        return result;
-    }
+  @Override
+  public int hashCode() {
+    return x << 16 + y;
+  }
 }
